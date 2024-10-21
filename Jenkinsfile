@@ -1,6 +1,10 @@
 node {
     files= ['deploy.yml']
 
+
+
+
+
     withCredentials([usernamePassword(credentialsId: 'prisma_cloud', passwordVariable: 'PC_PASS', usernameVariable: 'PC_USER')]) {
     PC_TOKEN = sh(script:"curl -s -k -H 'Content-Type: application/json' -H 'accept: application/json' --data '{\"username\":\"$PC_USER\", \"password\":\"$PC_PASS\"}' https://${AppStack}/login | jq --raw-output .token", returnStdout:true).trim()
     }
@@ -22,12 +26,12 @@ node {
         }
     }
 
-    //$PC_USER,$PC_PASS,$PC_CONSOLE when Galileo is released. 
-    stage('Apply security policies (Policy-as-Code) for evilpetclinic') {
-        withCredentials([usernamePassword(credentialsId: 'twistlock_creds', passwordVariable: 'TL_PASS', usernameVariable: 'TL_USER')]) {
-            sh('chmod +x files/addPolicies.sh && ./files/addPolicies.sh')
-        }
-    }
+    // //$PC_USER,$PC_PASS,$PC_CONSOLE when Galileo is released. 
+    // stage('Apply security policies (Policy-as-Code) for evilpetclinic') {
+    //     withCredentials([usernamePassword(credentialsId: 'twistlock_creds', passwordVariable: 'TL_PASS', usernameVariable: 'TL_USER')]) {
+    //         sh('chmod +x files/addPolicies.sh && ./files/addPolicies.sh')
+    //     }
+    // }
 
     //$PC_USER,$PC_PASS,$PC_CONSOLE when Galileo is released. 
     stage('Download latest twistcli') {
@@ -110,18 +114,18 @@ stage("Scan Cloud Formation Template with API v2") {
 //	    }
 //    }
 
-    stage('Deploy evilpetclinic') {
-        sh 'kubectl create ns evil --dry-run -o yaml | kubectl apply -f -'
-        sh 'kubectl delete --ignore-not-found=true -f files/deploy.yml -n evil'
-        sh 'kubectl apply -f files/deploy.yml -n evil'
-        sh 'sleep 10'
-    }
+    // stage('Deploy evilpetclinic') {
+    //     sh 'kubectl create ns evil --dry-run -o yaml | kubectl apply -f -'
+    //     sh 'kubectl delete --ignore-not-found=true -f files/deploy.yml -n evil'
+    //     sh 'kubectl apply -f files/deploy.yml -n evil'
+    //     sh 'sleep 10'
+    // }
 
-    stage('Run bad Runtime attacks') {
-        sh('chmod +x files/runtime_attacks.sh && ./files/runtime_attacks.sh')
-    }
+    // stage('Run bad Runtime attacks') {
+    //     sh('chmod +x files/runtime_attacks.sh && ./files/runtime_attacks.sh')
+    // }
 
-    stage('Run bad HTTP stuff for WAAS to catch') {
-        sh('chmod +x files/waas_attacks.sh && ./files/waas_attacks.sh')
-    }
+    // stage('Run bad HTTP stuff for WAAS to catch') {
+    //     sh('chmod +x files/waas_attacks.sh && ./files/waas_attacks.sh')
+    // }
 }
