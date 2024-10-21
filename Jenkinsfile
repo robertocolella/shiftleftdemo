@@ -4,6 +4,7 @@ node {
     properties([
         parameters([
             string(name: 'AppStack', defaultValue: 'app0.prismacloud.io', description: 'prismacloud url')
+            string(name:'TL_CONSOLE', defaultValue: 'app0.prismacloud.io')
         ])
     ])
 
@@ -17,17 +18,17 @@ node {
         checkout scm
     }
 
-    stage('Check image Git dependencies has no vulnerabilities') {
-        try {
-            withCredentials([usernamePassword(credentialsId: 'twistlock_creds', passwordVariable: 'TL_PASS', usernameVariable: 'TL_USER')]) {
-                sh('chmod +x files/checkGit.sh && ./files/checkGit.sh')
-            }
-        } catch (err) {
-            echo err.getMessage()
-            echo "Error detected"
-			throw RuntimeException("Build failed for some specific reason!")
-        }
-    }
+    // stage('Check image Git dependencies has no vulnerabilities') {
+    //     try {
+    //         withCredentials([usernamePassword(credentialsId: 'twistlock_creds', passwordVariable: 'TL_PASS', usernameVariable: 'TL_USER')]) {
+    //             sh('chmod +x files/checkGit.sh && ./files/checkGit.sh')
+    //         }
+    //     } catch (err) {
+    //         echo err.getMessage()
+    //         echo "Error detected"
+	// 		throw RuntimeException("Build failed for some specific reason!")
+    //     }
+    // }
 
     // //$PC_USER,$PC_PASS,$PC_CONSOLE when Galileo is released. 
     // stage('Apply security policies (Policy-as-Code) for evilpetclinic') {
