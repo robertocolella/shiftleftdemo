@@ -3,7 +3,7 @@ node {
 
     properties([
         parameters([
-            string(name: 'AppStack', defaultValue: 'https://app0.prismacloud.io', description: 'prismacloud url')
+            string(name: 'AppStack', defaultValue: 'app0.prismacloud.io', description: 'prismacloud url')
         ])
     ])
 
