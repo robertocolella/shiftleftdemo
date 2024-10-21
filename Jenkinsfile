@@ -9,17 +9,13 @@ node {
 
     echo "AppStack: ${AppStack}"
 
-    withCredentials([usernamePassword(credentialsId: 'prisma_cloud', passwordVariable: 'PC_PASS', usernameVariable: 'PC_USER')]) {
-    PC_TOKEN = sh(script:"curl -s -k -H 'Content-Type: application/json' -H 'accept: application/json' --data '{\"username\":\"$PC_USER\", \"password\":\"$PC_PASS\"}' https://${AppStack}/login | jq --raw-output .token", returnStdout:true).trim()
-    }
-    echo "Response: ${response}"
-    echo "AppStack: ${AppStack} 2"
+    // withCredentials([usernamePassword(credentialsId: 'prisma_cloud', passwordVariable: 'PC_PASS', usernameVariable: 'PC_USER')]) {
+    // PC_TOKEN = sh(script:"curl -s -k -H 'Content-Type: application/json' -H 'accept: application/json' --data '{\"username\":\"$PC_USER\", \"password\":\"$PC_PASS\"}' https://${AppStack}/login | jq --raw-output .token", returnStdout:true).trim()
+    // }
 
     stage('Clone repository') {
         checkout scm
     }
-
-    echo "AppStack: ${AppStack} 3"
 
     stage('Check image Git dependencies has no vulnerabilities') {
         try {
